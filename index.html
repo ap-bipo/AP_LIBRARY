@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AP_LIBRARY</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <link rel="stylesheet" href="reset.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <header class="navbar">
+        <div class="logo">
+            <i class='bx bxs-book-reader logo-icon'></i>
+            <span>AP_LIBRARY</span>
+        </div>
+
+        <div class="search-bar">
+            <i class='bx bx-search'></i>
+            <input type="text" id="search-input" placeholder="Tìm kiếm hàng triệu cuốn sách trên Google...">
+        </div>
+
+        <div class="nav-links" style="display: flex; gap: 2rem; align-items: center; font-weight: 500;">
+            <a href="index.html" style="color: white; text-decoration: none; transition: 0.3s;">Trang Chủ</a>
+            <a href="about.html" style="color: var(--text-muted); text-decoration: none; transition: 0.3s;">About Us</a>
+        </div>
+
+        <div class="nav-actions">
+            <button class="btn-ai-toggle" id="ai-toggle-btn">
+                <i class='bx bxs-magic-wand'></i> 
+                <span>AI Chọn Sách</span>
+            </button>
+        </div>
+    </header>
+
+    <main>
+        <div id="tts-status" class="tts-status hidden">
+            <span id="tts-status-text">AI đang đọc tự động...</span>
+            <div class="wave">
+                <span class="bar"></span>
+                <span class="bar"></span>
+                <span class="bar"></span>
+            </div>
+            <button id="tts-stop-btn" class="tts-stop"><i class='bx bx-stop-circle'></i> Buộc Dừng</button>
+        </div>
+
+        <section class="hero">
+            <div class="hero-content">
+            </div>
+        </section>
+
+        <section class="book-feed">
+            <div style="display:flex; justify-content:space-between; align-items:flex-end;">
+                <h2 class="section-title">Kho Sách Tìm Kiếm</h2>
+            </div>
+            
+            <div id="loading-spinner" class="loading-state">
+                <i class='bx bx-loader-alt bx-spin'></i> Đang thu thập sách từ thư viện...
+            </div>
+
+            <div class="grid-container" id="book-container">
+            </div>
+        </section>
+    </main>
+
+    <div class="reader-modal-overlay" id="reader-modal">
+        <div class="reader-container">
+            <button class="reader-close-btn" id="reader-close-btn"><i class='bx bx-x'></i> Đóng</button>
+            <div class="reader-layout">
+                <div class="reader-sidebar">
+                    <img src="" id="reader-book-cover" alt="Cover" class="sidebar-cover">
+                    <h3 id="reader-book-title" class="sidebar-title">Tên sách</h3>
+                    <p id="reader-book-author" class="sidebar-author">Tác giả</p>
+                    
+                    <div class="sidebar-links">
+                        <a href="#" target="_blank" id="btn-buy-book" class="sidebar-btn btn-buy"><i class='bx bx-cart'></i> Mua Sách</a>
+                        <a href="#" target="_blank" id="btn-audio-book" class="sidebar-btn btn-audio"><i class='bx bx-headphone'></i> Nghe Audio</a>
+                    </div>
+
+                    <div class="sidebar-chapters" id="sidebar-chapters-list">
+                    </div>
+                </div>
+
+                <div class="reader-content">
+                    <div class="content-header">
+                        <h2 id="content-chapter-title">Tiêu đề chương</h2>
+                        <div class="content-actions">
+                            <button id="btn-chapter-play" class="btn-reader-action play-action"><i class='bx bx-play-circle'></i> Nghe Tự Động Nội Dung Này</button>
+                            <button id="btn-chapter-pause" class="btn-reader-action pause-action" style="display: none;"><i class='bx bx-pause-circle'></i> Tạm Dừng</button>
+                        </div>
+                    </div>
+                    <div class="content-body" id="content-chapter-body">
+                        Vui lòng chờ trong giây lát để hệ thống tải chữ...
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="ai-widget" id="ai-widget">
+        <div class="ai-header">
+            <div class="ai-title"><i class='bx bx-bot'></i> Aura AI Tâm Lý</div>
+            <button class="close-ai-btn" id="close-ai-btn"><i class='bx bx-minus'></i></button>
+        </div>
+        
+        <div class="ai-body" id="ai-chat-body">
+            <div class="chat-message ai-message">
+                <p>Cho tôi biết bạn đang tìm thể loại cảm xúc nào? Tôi sẽ tìm nó rên máy chủ khổng lồ của Google Books.</p>
+            </div>
+            <div class="mood-chips">
+                <button class="mood-chip" data-mood="stress">Đang áp lực</button>
+                <button class="mood-chip" data-mood="chill">Muốn thư giãn</button>
+                <button class="mood-chip" data-mood="motivation">Thiếu năng lượng</button>
+                <button class="mood-chip" data-mood="sad">Buồn và suy tư</button>
+                <button class="mood-chip" data-mood="love">Tình yêu lãng mạn</button>
+                <button class="mood-chip" data-mood="business">Kiến thức đầu tư</button>
+                <button class="mood-chip" data-mood="sci-fi">Khoa học viễn tưởng</button>
+                <button class="mood-chip" data-mood="history">Lịch sử thế giới</button>
+            </div>
+            <div class="typing-indicator" id="ai-typing">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

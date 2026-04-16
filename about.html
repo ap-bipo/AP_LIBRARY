@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Us - AP_LIBRARY</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <link rel="stylesheet" href="reset.css">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .about-hero {
+            padding: 8rem 4rem 4rem;
+            text-align: center;
+            animation: fadeIn 1s ease-out;
+        }
+        .about-hero h1 {
+            font-size: 4rem;
+            font-weight: 800;
+            margin-bottom: 1.5rem;
+            background: var(--primary-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .about-hero p {
+            font-size: 1.3rem;
+            color: var(--text-muted);
+            max-width: 800px;
+            margin: 0 auto 3rem;
+            line-height: 1.8;
+        }
+        .about-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            padding: 0 4rem 6rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .about-card {
+            background: var(--bg-surface);
+            border: 1px solid var(--border-light);
+            border-radius: var(--border-radius-lg);
+            padding: 2.5rem;
+            text-align: left;
+            transition: var(--transition);
+            opacity: 0;
+            transform: translateY(20px);
+            animation: slideUp 0.8s ease-out forwards;
+        }
+        .about-card:nth-child(2) { animation-delay: 0.2s; }
+        .about-card:nth-child(3) { animation-delay: 0.4s; }
+
+        .about-card:hover {
+            transform: translateY(-5px);
+            background: var(--bg-surface-hover);
+            border-color: rgba(168, 85, 247, 0.4);
+            box-shadow: 0 10px 30px rgba(168, 85, 247, 0.1);
+        }
+        .about-icon {
+            font-size: 3rem;
+            color: #ec4899;
+            margin-bottom: 1.5rem;
+            background: rgba(236, 72, 153, 0.1);
+            padding: 1rem;
+            border-radius: 20px;
+            display: inline-block;
+        }
+        .about-card h3 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: white;
+        }
+        .about-card p {
+            color: var(--text-muted);
+            line-height: 1.7;
+            font-size: 1.05rem;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Hover style for nav */
+        .nav-links a:hover { color: #e9d5ff !important; }
+    </style>
+</head>
+<body>
+
+    <header class="navbar">
+        <div class="logo">
+            <i class='bx bxs-book-reader logo-icon'></i>
+            <span>AP_LIBRARY</span>
+        </div>
+
+        <div class="nav-links" style="display: flex; gap: 2rem; align-items: center; font-weight: 500;">
+            <a href="index.html" style="color: var(--text-muted); text-decoration: none; transition: 0.3s;">Trang Chủ</a>
+            <a href="about.html" style="color: white; text-decoration: none; transition: 0.3s; border-bottom: 2px solid #a855f7;">About Us</a>
+        </div>
+
+        <div class="nav-actions">
+            <!-- Nút về màn chính -->
+            <a href="index.html" style="text-decoration: none;">
+                <button class="btn-ai-toggle" style="background: rgba(255,255,255,0.1); box-shadow: none; border: 1px solid rgba(255,255,255,0.2);">
+                    <i class='bx bx-book-open'></i> Thư Viện
+                </button>
+            </a>
+        </div>
+    </header>
+
+    <main>
+        <section class="about-hero">
+            <h1>Phá Bỏ Rào Cản Đọc Sách</h1>
+            <p>AP_LIBRARY ra đời với mong muốn mang lại văn hoá đọc thân thiện nhất trên Internet. Chúng tôi thiết kế một trình phát Audio AI thông minh giúp những người bận rộn vẫn có thể "tiếp thu" tri thức mọi lúc mọi nơi.</p>
+        </section>
+
+        <section class="about-grid">
+            <div class="about-card">
+                <i class='bx bx-accessibility about-icon'></i>
+                <h3>Trải Nghiệm Đa Giác Quan</h3>
+                <p>Mắt thấy chữ to rõ, tai nghe giọng đọc truyền cảm hứng. Chúng tôi xoá bỏ sự mỏi mệt khi đọc sách truyền thống thông qua cá nhân hoá Font chữ và Text-To-Speech.</p>
+            </div>
+            <div class="about-card">
+                <i class='bx bxs-magic-wand about-icon'></i>
+                <h3>AI Thấu Hiểu Cảm Xúc</h3>
+                <p>Bạn đang buồn hay mất định hướng? Đừng lo lắng. Trợ lý AI của chúng tôi sẽ đề xuất đúng lúc những tựa sách có thể chữa lành tâm hồn và hợp nhất với tâm trạng.</p>
+            </div>
+            <div class="about-card">
+                <i class='bx bx-library about-icon'></i>
+                <h3>Thư Viện Vô Tận</h3>
+                <p>Hệ thống tự động liên kết với kho tri thức khổng lồ thế giới của Google Books, giúp bạn dễ dàng mở ra hàng triệu kiệt tác và liên kết tìm kiếm Audio trên mạng mượt mà.</p>
+            </div>
+        </section>
+    </main>
+
+</body>
+</html>
