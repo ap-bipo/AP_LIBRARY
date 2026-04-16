@@ -224,6 +224,20 @@ body {
     color: white;
 }
 
+.pagination-actions {
+    text-align: center;
+    margin-top: 3.5rem;
+}
+
+#btn-load-more {
+    display: inline-flex;
+    justify-content: center;
+    width: auto;
+    padding: 0.8rem 2.5rem;
+    font-size: 1.1rem;
+    border-color: rgba(168, 85, 247, 0.5);
+}
+
 .reader-modal-overlay {
     position: fixed;
     top: 0; left: 0; right: 0; bottom: 0;

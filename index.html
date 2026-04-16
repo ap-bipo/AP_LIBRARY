@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AP_LIBRARY</title>
+    <title>LibroMind</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
@@ -16,7 +16,7 @@
     <header class="navbar">
         <div class="logo">
             <i class='bx bxs-book-reader logo-icon'></i>
-            <span>AP_LIBRARY</span>
+            <span>LibroMind</span>
         </div>
 
         <div class="search-bar">
@@ -63,6 +63,10 @@
             </div>
 
             <div class="grid-container" id="book-container">
+            </div>
+
+            <div class="pagination-actions">
+                <button id="btn-load-more" class="btn-open-reader" style="display:none;"><i class='bx bx-chevron-down' style="font-size: 1.2rem;"></i> Tải Trang Kế Tiếp</button>
             </div>
         </section>
     </main>
@@ -120,6 +124,7 @@
                 <button class="mood-chip" data-mood="business">Kiến thức đầu tư</button>
                 <button class="mood-chip" data-mood="sci-fi">Khoa học viễn tưởng</button>
                 <button class="mood-chip" data-mood="history">Lịch sử thế giới</button>
+                <button class="mood-chip" data-mood="english">Sách Tiếng Anh (English)</button>
             </div>
             <div class="typing-indicator" id="ai-typing">
                 <span></span><span></span><span></span>

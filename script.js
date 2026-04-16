@@ -2,13 +2,23 @@ const bookContainer = document.getElementById('book-container');
 const loadingSpinner = document.getElementById('loading-spinner');
 
 let fetchedBooksCache = [];
+let currentSearchQuery = '';
+let currentStartIndex = 0;
 
-async function fetchBooks(query = "subject:fiction") {
-    bookContainer.innerHTML = '';
+async function fetchBooks(query = "subject:fiction", startIndex = 0, isAppend = false) {
+    currentSearchQuery = query;
+    currentStartIndex = startIndex;
+
+    if (!isAppend) {
+        bookContainer.innerHTML = '';
+        fetchedBooksCache = [];
+    }
+    
+    document.getElementById('btn-load-more').style.display = 'none';
     loadingSpinner.style.display = 'block';
 
     try {
-        const url = `https://www.googleapis.com/books/v1/volumes?q=${encodeURIComponent(query)}&maxResults=12&orderBy=relevance`;
+        const url = `https://www.googleapis.com/books/v1/volumes?q=${encodeURIComponent(query)}&maxResults=12&startIndex=${startIndex}&orderBy=relevance`;
         const response = await fetch(url);
         const data = await response.json();
 
@@ -16,12 +26,17 @@ async function fetchBooks(query = "subject:fiction") {
 
         if (data.items) {
             processAndRenderBooks(data.items);
+            if (data.items.length === 12) {
+                document.getElementById('btn-load-more').style.display = 'inline-flex';
+            }
         } else {
-            bookContainer.innerHTML = '<p style="text-align:center;width:100%;color:#a0aec0;">Không tìm thấy sách phù hợp.</p>';
+            if (!isAppend) {
+                bookContainer.innerHTML = '<p style="text-align:center;width:100%;color:#a0aec0;">Không tìm thấy sách phù hợp.</p>';
+            }
         }
     } catch (error) {
         loadingSpinner.style.display = 'none';
-        bookContainer.innerHTML = '<p style="text-align:center;width:100%;color:red;">Lỗi kết nối máy chủ Google API.</p>';
+        if (!isAppend) bookContainer.innerHTML = '<p style="text-align:center;width:100%;color:red;">Lỗi kết nối máy chủ Google API.</p>';
         console.error("API Error:", error);
     }
 }
@@ -51,8 +66,6 @@ function generateMockChapters(fullDescription) {
 }
 
 function processAndRenderBooks(items) {
-    fetchedBooksCache = [];
-
     items.forEach((item) => {
         const info = item.volumeInfo;
         const id = item.id;
@@ -85,18 +98,30 @@ function processAndRenderBooks(items) {
     });
 }
 
-// Khởi tạo một danh sách các đầu mục nổi tiếng
+// Khởi tạo một danh sách các đầu mục nổi tiếng đa ngôn ngữ
 const defaultQueries = [
     'nhà giả kim', 
     'đắc nhân tâm', 
     'harry potter', 
     'tuổi trẻ đáng giá bao nhiêu', 
     'cây cam ngọt của tôi',
-    'sách văn học'
+    'sách văn học',
+    'Atomic Habits',
+    'Sapiens: A Brief History of Humankind',
+    'The Great Gatsby',
+    'To Kill a Mockingbird'
 ];
 // Mỗi lần refresh trang sẽ random tải 1 hạng mục để tránh trùng lặp và không bị Google chặn do câu lệnh quá dài
 const randomLoadQuery = defaultQueries[Math.floor(Math.random() * defaultQueries.length)];
 fetchBooks(randomLoadQuery);
+
+document.getElementById('btn-load-more').addEventListener('click', () => {
+    const btn = document.getElementById('btn-load-more');
+    btn.innerHTML = "<i class='bx bx-loader-alt bx-spin' style='font-size: 1.2rem; margin-right: 5px;'></i> Đang tải...";
+    fetchBooks(currentSearchQuery, currentStartIndex + 12, true).then(() => {
+        btn.innerHTML = "<i class='bx bx-chevron-down' style='font-size: 1.2rem; margin-right: 5px;'></i> Tải Trang Kế Tiếp";
+    });
+});
 
 document.getElementById('search-input').addEventListener('keypress', function (e) {
     if (e.key === 'Enter' && this.value.trim()) fetchBooks(this.value);
@@ -252,12 +277,13 @@ const typingIndicator = document.getElementById('ai-typing');
 const moodKeywords = {
     'stress': 'sách thiền OR nghỉ ngơi OR giảm stress',
     'chill': 'văn học đời sống OR tản văn OR tịnh tâm',
-    'motivation': 'tiểu sử kinh doanh OR truyền cảm hứng OR vượt khó',
+    'motivation': 'sách tạo động lực OR self-help OR phát triển bản thân',
     'sad': 'sách tâm lý OR chữa lành OR yêu bản thân',
     'love': 'tiểu thuyết tình cảm OR ngôn tình',
     'business': 'sách kinh tế OR quản trị kinh doanh OR đầu tư',
     'sci-fi': 'khoa học viễn tưởng OR fantasy OR sci-fi',
-    'history': 'sách lịch sử thế giới OR danh nhân lịch sử'
+    'history': 'sách lịch sử thế giới OR danh nhân lịch sử',
+    'english': 'New York Times best seller english books OR classic english literature'
 };
 
 aiToggleBtn.addEventListener('click', () => aiWidget.classList.toggle('open'));
@@ -291,7 +317,20 @@ function appendMessage(text, className) {
 
 function handleAIResponse(mood) {
     const query = moodKeywords[mood];
-    let answerResponse = `Tuyệt, tôi đang gọi thư viện Google lấy những sách thuộc chủ đề "${query}" cho bạn nhé.`;
+    
+    const uiFriendlyNames = {
+        'stress': 'Giảm Stress & Thiền định',
+        'chill': 'Thư giãn & Đời sống',
+        'motivation': 'Phát triển bản thân & Động lực',
+        'sad': 'Chữa lành tâm hồn',
+        'love': 'Tình yêu & Sự lãng mạn',
+        'business': 'Sự nghiệp & Đầu tư',
+        'sci-fi': 'Khoa học viễn tưởng',
+        'history': 'Lịch sử hào hùng',
+        'english': 'Tinh Hoa Sách Ngoại Văn (English)'
+    };
+
+    let answerResponse = `Tuyệt, tôi đang kết nối với hệ thống để lọc ra các kiệt tác xuất sắc nhất về chủ đề <b>"${uiFriendlyNames[mood]}"</b> cho bạn nhé.`;
     appendMessage(answerResponse, 'ai-message');
 
     document.getElementById('book-container').scrollIntoView({ behavior: 'smooth', block: 'start' });
