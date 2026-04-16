@@ -20,23 +20,32 @@ async function fetchBooks(query = "subject:fiction", startIndex = 0, isAppend = 
     try {
         const url = `https://www.googleapis.com/books/v1/volumes?q=${encodeURIComponent(query)}&maxResults=12&startIndex=${startIndex}&orderBy=relevance`;
         const response = await fetch(url);
-        const data = await response.json();
-
+        
         loadingSpinner.style.display = 'none';
 
+        if (response.status === 429) {
+            if (!isAppend) bookContainer.innerHTML = '<p style="text-align:center;width:100%;color:#ec4899;">⚠️ Máy chủ Google đang bị kẹt do vượt quá băng thông miễn phí. Vui lòng đợi khoảng 15 giây rồi thử lại tải trang nhé!</p>';
+            return;
+        }
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const data = await response.json();
+
         if (data.items) {
-            processAndRenderBooks(data.items);
+            processAndRenderBooks(data.items, isAppend);
             if (data.items.length === 12) {
                 document.getElementById('btn-load-more').style.display = 'inline-flex';
             }
         } else {
             if (!isAppend) {
-                bookContainer.innerHTML = '<p style="text-align:center;width:100%;color:#a0aec0;">Không tìm thấy sách phù hợp.</p>';
+                bookContainer.innerHTML = '<p style="text-align:center;width:100%;color:#a0aec0;">Không tìm thấy cuốn sách nào phù hợp với từ khóa này. Hãy thử lại bằng từ khóa khác!</p>';
             }
         }
     } catch (error) {
         loadingSpinner.style.display = 'none';
-        if (!isAppend) bookContainer.innerHTML = '<p style="text-align:center;width:100%;color:red;">Lỗi kết nối máy chủ Google API.</p>';
+        if (!isAppend) bookContainer.innerHTML = '<p style="text-align:center;width:100%;color:red;">Lỗi kết nối mạng hoặc máy chủ Google đang từ chối truy cập do nghẽn mạng.</p>';
         console.error("API Error:", error);
     }
 }
